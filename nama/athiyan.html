@@ -56,10 +56,33 @@
       font-style: italic;
       letter-spacing: 2px;
     }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #aee1ff;
+      border: 1px solid #5fa8d3;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 20px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .back-button:hover {
+      background-color: #5fa8d3;
+      color: #001f3f;
+    }
+
   </style>
 </head>
 <body>
   <div class="overlay">
+    <!-- Tombol Kembali -->
+    <a href="../index.html" class="back-button">← Kembali</a>
+
     <div class="profile-card">
       <h2>おはよう</h2>
       <h1>Athiyan Aqil Muhammad</h1>
