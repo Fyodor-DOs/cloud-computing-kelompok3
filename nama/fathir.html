@@ -56,16 +56,159 @@
       font-style: italic;
       letter-spacing: 2px;
     }
+
+    .thought-catcher {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px dashed #5fa8d3; 
+    }
+
+    .thought-catcher h3 {
+      font-size: 28px;
+      color: #aee1ff;
+      margin-bottom: 15px;
+    }
+
+    .thought-input {
+      background-color: rgba(0, 0, 0, 0.3);
+      border: 1px solid #5fa8d3;
+      color: #d0e6ff;
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      padding: 10px;
+      width: calc(100% - 22px);
+      margin-bottom: 15px;
+      border-radius: 5px;
+    }
+
+    .thought-input::placeholder {
+      color: #8cb0d9;
+      opacity: 0.7;
+    }
+
+    .thought-button {
+      background-color: #5fa8d3;
+      border: none;
+      color: rgba(20, 30, 60, 0.9);
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .thought-button:hover {
+      background-color: #aee1ff;
+      color: rgba(0, 10, 30, 1);
+    }
+
+    .thought-list {
+      margin-top: 20px;
+      list-style: none;
+      padding-left: 0;
+      max-height: 150px; 
+      overflow-y: auto;
+      text-align: left; 
+    }
+
+    .thought-list li {
+      background-color: rgba(0, 0, 0, 0.2);
+      border-left: 3px solid #5fa8d3;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      font-size: 18px;
+      color: #c0d8f7;
+      border-radius: 3px;
+      word-wrap: break-word; 
+    }
+
+    .thought-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    .thought-list::-webkit-scrollbar-track {
+      background: rgba(0, 10, 30, 0.5);
+      border-radius: 4px;
+    }
+    .thought-list::-webkit-scrollbar-thumb {
+      background: #5fa8d3;
+      border-radius: 4px;
+    }
+    .thought-list::-webkit-scrollbar-thumb:hover {
+      background: #aee1ff;
+    }
+
   </style>
 </head>
 <body>
   <div class="overlay">
     <div class="profile-card">
-      <h1>Ahmed Fathir Syafaat</h1>
-      <h2>2241720083</h2>
-      <h2>TI-3C</h2>
+      <h1>Ahmed Fathir Syafaat</h1> 
+      <h2>2241720083</h2> 
+      <h2>TI-3C</h2>  
       <div class="memento">Memento Mori</div>
-    </div>
+
+      <div class="thought-catcher">
+        <h3>Fleeting Thoughts</h3>
+        <input type="text" id="thoughtInput" class="thought-input" placeholder="Capture a thought...">
+        <div>
+            <button onclick="addThought()" class="thought-button">Capture</button>
+            <button onclick="clearThoughts()" class="thought-button">Let Go</button>
+        </div>
+        <ul id="thoughtList" class="thought-list">
+          </ul>
+      </div>
+      </div>
   </div>
+
+  <script>
+    const thoughtInput = document.getElementById('thoughtInput');
+    const thoughtList = document.getElementById('thoughtList');
+    const MAX_THOUGHTS = 5;
+
+    let thoughts = JSON.parse(localStorage.getItem('fleetingThoughts')) || [];
+
+    function renderThoughts() {
+      thoughtList.innerHTML = ''; 
+      const thoughtsToDisplay = thoughts.slice(-MAX_THOUGHTS);
+
+      thoughtsToDisplay.forEach(thoughtText => {
+        const li = document.createElement('li');
+        li.textContent = thoughtText;
+        thoughtList.insertBefore(li, thoughtList.firstChild); 
+      });
+    }
+
+    function addThought() {
+      const newThought = thoughtInput.value.trim();
+      if (newThought) {
+        thoughts.push(newThought);
+        if (thoughts.length > MAX_THOUGHTS * 2) { 
+            thoughts = thoughts.slice(-MAX_THOUGHTS * 2);
+        }
+        localStorage.setItem('fleetingThoughts', JSON.stringify(thoughts));
+        renderThoughts();
+        thoughtInput.value = ''; 
+        thoughtInput.focus();
+      }
+    }
+
+    function clearThoughts() {
+      if (confirm("Are you sure you want to let go of all captured thoughts? This cannot be undone.")) {
+        thoughts = [];
+        localStorage.removeItem('fleetingThoughts');
+        renderThoughts();
+      }
+    }
+
+    thoughtInput.addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        addThought();
+      }
+    });
+
+    renderThoughts();
+  </script>
 </body>
 </html>
